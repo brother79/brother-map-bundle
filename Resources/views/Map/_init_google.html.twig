@@ -10,22 +10,22 @@
 
 <script type="text/javascript">
     function initialize() {
-        var latlng = new google.maps.LatLng(<?php echo $longitude ?>, <?php echo $latitude ?>);
+        var latlng = new google.maps.LatLng({{ longitude }}, {{ latitude }});
         var myOptions = {
-            zoom: <?php echo $zoom ?>,
+            zoom: {{ zoom }},
             center:latlng,
-            mapTypeId: <?php echo $type ?>
+            mapTypeId: {{ type }}
         };
-        var map = new google.maps.Map(document.getElementById("<?php echo $id ?>"),
+        var map = new google.maps.Map(document.getElementById("{{ id }}"),
             myOptions);
 
-    <?php if (!empty($title)): ?>
+        {% if title is defined %}
         var marker = new google.maps.Marker({
             position:latlng,
             map:map,
-            title:"<?php echo $title ?>"
+            title:"{{ title }}"
         });
-        <?php endif ?>
+        {% endif %}
 
     }
 

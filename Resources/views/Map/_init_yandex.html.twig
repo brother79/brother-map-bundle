@@ -10,24 +10,17 @@
 <script src="http://api-maps.yandex.ru/2.0/?load=package.full&mode=debug&lang=ru-RU" type="text/javascript"></script>
 <script type="text/javascript">
     ymaps.ready(function () {
-
-        var map = new ymaps.Map("<?php echo $id ?>", {
-            center:[<?php echo $longitude ?>, <?php echo $latitude ?>],
-            zoom:<?php echo $zoom ?>, type:"<?php echo $type ?>",
-            behaviors:['default', 'scrollZoom']
+        var map = new ymaps.Map("{{ id }}", {
+            center: [{{ longitude  }}, {{ latitude }}],
+            zoom:{{ zoom  }}, type: "{{ type }}",
+            behaviors: ['default', 'scrollZoom']
         });
-    <?php echo html_entity_decode($map->renderControls()) ?>
-
-
-    <?php if (isset($objects)): ?>
-        <?php /** @var $object mapGeoObject */
-        foreach ($objects as $k => $object): ?>
-            map.geoObjects.add(new ymaps.GeoObject(<?php echo html_entity_decode($object->renderYandex()) ?>));
-            <?php endforeach; ?>
-        <?php endif ?>
-
-
+        {{ map.renderControls|raw }}
+        {% if objects is defined %}
+        {% for object in objects %}
+        map.geoObjects.add(new ymaps.GeoObject({{ object->renderYandex|raw }}));
+        {% endfor %}
+        {% endif %}
     });
-
 </script>
 
