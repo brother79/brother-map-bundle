@@ -7,11 +7,9 @@
             behaviors: ['default', 'scrollZoom']
         });
         {{ map.renderControls|raw }}
-        {% if objects is defined %}
-        {% for object in objects %}
-           map.geoObjects.add(new ymaps.GeoObject({{ object.renderYandex|raw }}));
+        {% for object in map.objects %}
+           map.geoObjects.add(new ymaps.GeoObject( {{ object.renderYandex|raw }} ));
         {% endfor %}
-        {% endif %}
     });
 </script>
 

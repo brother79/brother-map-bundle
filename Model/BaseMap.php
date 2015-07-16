@@ -45,4 +45,23 @@ abstract class BaseMap
 
     public abstract function getZoom();
 
+    public function addObject($object)
+    {
+        $this->params['objects'][] = $object;
+    }
+
+    public function addControl($control)
+    {
+        $this->params['controls'][] = $control;
+    }
+
+    protected function getControls()
+    {
+        return isset($this->params['controls']) ? $this->params['controls'] : array();
+    }
+
+    public function getObjects()
+    {
+        return isset($this->params['objects']) ? $this->params['objects'] : array();
+    }
 } 

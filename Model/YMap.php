@@ -64,11 +64,6 @@ class YMap extends BaseMap
 
     }
 
-    private function getControls()
-    {
-        return isset($this->params['controls']) ? $this->params['controls'] : array();
-    }
-
 
     public function getType()
     {
@@ -79,4 +74,5 @@ class YMap extends BaseMap
     {
         return $this->getParam('map_zoom', 12);
     }
+
 }

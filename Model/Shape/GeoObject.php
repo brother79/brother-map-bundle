@@ -88,7 +88,7 @@ class GeoObject
     {
         $r = array();
         foreach ($values as $k => $v) {
-            $r[] = $k . ':' . '"' . $v . '"';
+            $r[] = $k . ':' . '"' . str_replace('"', '\"', $v) . '"';
         }
         return '{' . implode(',', $r) . '}';
     }

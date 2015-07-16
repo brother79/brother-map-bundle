@@ -11,6 +11,10 @@
 
 namespace Brother\MapBundle\Block;
 
+use Brother\CommonBundle\AppDebug;
+use Brother\MapBundle\Model\Options\PresetStorage;
+use Brother\MapBundle\Model\Shape\GeoObject;
+use Brother\MapBundle\Model\Shape\Point;
 use Brother\MapBundle\Model\YMap;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -49,6 +53,14 @@ class YandexMapBlock extends BaseBlockService
     {
         // merge settings
         $map = new YMap($blockContext->getSettings());
+        if ($blockContext->getSetting('title')) {
+            $map->addObject(new Point(
+                $blockContext->getSetting('latitude'),
+                $blockContext->getSetting('longitude'),
+                array(GeoObject::PROPERTY_ICON_CONTENT => $blockContext->getSetting('title')),
+                array(GeoObject::OPTION_PRESET => $blockContext->getSetting('title_style', 'twirl#pinkStretchyIcon'))
+            ));
+        }
 
         return $this->renderPrivateResponse($blockContext->getTemplate(), array(
             'context' => $blockContext,
@@ -79,7 +91,7 @@ class YandexMapBlock extends BaseBlockService
         $formMapper->add('settings', 'sonata_type_immutable_array', array(
             'keys' => array(
                 array('title', 'text', array('required' => false)),
-                array('title_style', 'text', array('required' => false)),
+                array('title_style', 'choice', array('required' => false, 'choices' => PresetStorage::$stretchIcons)),
 
                 array('html_id', 'text', array('required' => true, 'data' => $block->getSetting('html_id', 'ymap'))),
                 array('latitude', 'number', array('required' => true, 'data' => $block->getSetting('latitude', $this->config['latitude']), 'precision' => 6)),
@@ -115,8 +127,8 @@ class YandexMapBlock extends BaseBlockService
     {
 //        AppDebug::_dx($resolver->);
         $resolver->setDefaults(array(
-			'title' => null,
-			'title_style' => null,
+            'title' => null,
+            'title_style' => null,
             'template' => 'BrotherMapBundle:Block:yandex_map.html.twig',
             'context' => 'GLOBAL',
             'html_id' => 'ymap',
