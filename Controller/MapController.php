@@ -7,6 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class MapController extends Controller
 {
+
+    public function yandexAction()
+    {
+        return $this->render('BrotherMapBundle:Map:yandex.html.twig', array(
+        ));
+    }
+
     public function initYandexAction()
     {
         $map = new YMap(array());

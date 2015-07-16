@@ -1,0 +1,29 @@
+<div id='ymap'></div>
+<?php
+    include_component('map', 'init_yandex', array(
+        'id' => 'ymap',
+'latitude' => 83.682590, 'longitude' => 53.224638,
+'zoom' => 12,
+'type' => YMap::MAP_TYPE_HYBRID,
+'controls' => array(
+YMap::CONTROL_ZOOM_SMALL => array('left' => 5, 'top' => 50),
+YMap::CONTROL_MAP_TOOLS),
+'objects' => array(
+new mapPoint(53.222480, 83.692203,
+array(mapGeoObject::PROPERTY_ICON_CONTENT => 'Сибирская долина'),
+array(mapGeoObject::OPTION_PRESET => 'twirl#pinkStretchyIcon')),
+new mapPolygon(array(array(
+array('longitude' => 53.230290, 'latitude' => 83.684993),
+array('longitude' => 53.229314, 'latitude' => 83.693576),
+array('longitude' => 53.227207, 'latitude' => 83.693061),
+array('longitude' => 53.226385, 'latitude' => 83.704391),
+array('longitude' => 53.215799, 'latitude' => 83.703532),
+array('longitude' => 53.217392, 'latitude' => 83.681731),
+array('longitude' => 53.230290, 'latitude' => 83.684993)
+)), array(),
+array(
+mapGeoObject::OPTION_STROKE_WIDTH => 5,
+mapGeoObject::OPTION_STROKE_COLOR => '#fcb',
+mapGeoObject::OPTION_OPACITY => 0.2)
+))));
+?>

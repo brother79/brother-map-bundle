@@ -20,10 +20,30 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('brother_map');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
+        $rootNode
+            ->children()
+                ->floatNode('latitude')->cannotBeEmpty()->end()
+                ->floatNode('longitude')->cannotBeEmpty()->end()
+                ->arrayNode('yandex')->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('html_id')->defaultValue('ymap')->end()
+                        ->integerNode('zoom')->min(1)->defaultValue(12)->end()
+                        ->scalarNode('type')->defaultValue('yandex#hybrid')->end()
+                        ->arrayNode('controls')->end()
+                        ->arrayNode('objects')->end()
+                    ->end()
+                ->end()
+                ->arrayNode('google')->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('html_id')->defaultValue('ymap')->end()
+                        ->integerNode('zoom')->min(1)->defaultValue(12)->end()
+                        ->scalarNode('type')->defaultValue('yandex#hybrid')->end()
+                        ->arrayNode('controls')->end()
+                        ->arrayNode('objects')->end()
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
         return $treeBuilder;
     }
 }
