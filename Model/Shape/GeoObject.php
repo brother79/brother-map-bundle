@@ -74,7 +74,7 @@ class GeoObject
     private function renderCoordinates($values)
     {
         if (isset($values['longitude'])) {
-            return '[' . $values['longitude'] . ',' . $values['latitude'] . ']';
+            return '[' . $values['latitude'] . ',' . $values['longitude'] . ']';
         } else {
             $r = array();
             foreach ($values as $coo) {

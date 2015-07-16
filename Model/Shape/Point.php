@@ -11,7 +11,7 @@ namespace Brother\MapBundle\Model\Shape;
  */
 class Point extends GeoObject
 {
-    function __construct($longitude, $latitude, $properties = array(), $options = array())
+    function __construct($latitude, $longitude, $properties = array(), $options = array())
     {
         parent::__construct(self::TYPE_POINT,
             array('longitude' => $longitude, 'latitude' => $latitude),

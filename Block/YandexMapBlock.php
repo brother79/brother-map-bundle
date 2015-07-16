@@ -14,6 +14,7 @@ namespace Brother\MapBundle\Block;
 use Brother\MapBundle\Model\Options\PresetStorage;
 use Brother\MapBundle\Model\Shape\GeoObject;
 use Brother\MapBundle\Model\Shape\Point;
+use Brother\MapBundle\Model\Shape\Polygon;
 use Brother\MapBundle\Model\YMap;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -52,8 +53,12 @@ class YandexMapBlock extends BaseBlockService
     {
         $settings = $blockContext->getSettings();
 
-        // merge settings
         $map = new YMap($blockContext->getSettings());
+        $map->addControls(array(
+            YMap::CONTROL_ZOOM_SMALL => array('left' => 5, 'top' => 50),
+            YMap::CONTROL_MAP_TOOLS
+        ));
+
         if (!empty($settings['point']['title'])) {
             $map->addObject(new Point(
                 $settings['point']['latitude'],
@@ -62,8 +67,19 @@ class YandexMapBlock extends BaseBlockService
                 array(GeoObject::OPTION_PRESET => empty($settings['point']['title_style']) ? 'twirl#pinkStretchyIcon' : $settings['point']['title_style'])
             ));
         }
-
-        return $this->renderPrivateResponse($blockContext->getTemplate(), array(
+        if (!empty($settings['polygon']['points'])) {
+            $r = array_chunk(preg_split('/[\s\n\t]+/', $settings['polygon']['points']), 2);
+            $points = array();
+            foreach ($r as $v) {
+                $points[] = array_combine(array('latitude', 'longitude'), $v);
+            }
+            $map->addObject(new Polygon(array($points), array(), array(
+                GeoObject::OPTION_STROKE_WIDTH => empty($settings['polygon'][GeoObject::OPTION_STROKE_WIDTH]) ? 5 : $settings['polygon'][GeoObject::OPTION_STROKE_WIDTH],
+                GeoObject::OPTION_STROKE_COLOR => empty($settings['polygon'][GeoObject::OPTION_STROKE_COLOR]) ? '#fcb' : $settings['polygon'][GeoObject::OPTION_STROKE_COLOR],
+                GeoObject::OPTION_OPACITY => empty($settings['polygon'][GeoObject::OPTION_OPACITY]) ? 0.2 : $settings['polygon'][GeoObject::OPTION_OPACITY]
+            )));
+        }
+        return $this->renderResponse($blockContext->getTemplate(), array(
             'context' => $blockContext,
             'settings' => $blockContext->getSettings(),
             'block' => $blockContext->getBlock(),
@@ -132,7 +148,7 @@ class YandexMapBlock extends BaseBlockService
                             'precision' => 6)),
                     ))),
                     array('polygon', 'sonata_type_immutable_array', array('keys' => array(
-                        array('points', 'text', array('required' => false)),
+                        array('points', 'textarea', array('required' => false)),
                         array(GeoObject::OPTION_STROKE_WIDTH, 'text', array('required' => false)),
                         array(GeoObject::OPTION_STROKE_COLOR, 'text', array('required' => false)),
                         array(GeoObject::OPTION_OPACITY, 'text', array('required' => false)),
