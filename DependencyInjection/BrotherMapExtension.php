@@ -38,6 +38,9 @@ class BrotherMapExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
+        $container->setParameter('brother_map.latitude', $config['latitude']);
+        $container->setParameter('brother_map.longitude', $config['longitude']);
+
         $container->setParameter('brother_map.yandex.html_id', $config['yandex']['html_id']);
         $container->setParameter('brother_map.yandex.zoom', $config['yandex']['zoom']);
         $container->setParameter('brother_map.yandex.type', $config['yandex']['type']);

@@ -1,1 +1,14 @@
+parameters:
+    brother_map.yandex.config:
+        latitude: %brother_map.latitude%
+        longitude: %brother_map.longitude%
+        type: %brother_map.yandex.type%
+        zoom: %brother_map.yandex.zoom%
 services:
+    brother_map.block.yandex_map:
+        class: Brother\MapBundle\Block\YandexMapBlock
+        tags: [ { name: "sonata.block" } ]
+        arguments:
+            - ~
+            - @templating
+            - %brother_map.yandex.config%
