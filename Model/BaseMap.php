@@ -21,24 +21,27 @@ abstract class BaseMap
         $this->params = $params;
     }
 
-    public function getParam($name, $default = null)
+    public function getParam($name, $default = null, $group=null)
     {
+        if ($group && isset($this->params[$group][$name])) {
+            return $this->params[$group][$name];
+        }
         return empty($this->params[$name]) ? $default : $this->params[$name];
     }
 
     public function getHtmlId()
     {
-        return $this->getParam('html_id', 'ymap');
+        return $this->getParam('html_id', 'ymap', 'map');
     }
 
     public function getLatitude()
     {
-        return $this->getParam('latitude');
+        return $this->getParam('latitude', null, 'point');
     }
 
     public function getLongitude()
     {
-        return $this->getParam('longitude');
+        return $this->getParam('longitude', null, 'point');
     }
 
     public abstract function getType();

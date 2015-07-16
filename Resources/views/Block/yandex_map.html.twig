@@ -1,6 +1,6 @@
 {% extends sonata_block.templates.block_base %}
 
 {% block block %}
-    <div id="{{ settings.html_id }}" class="yandex-map"></div>
+    <div id="{{ map.htmlId }}" class="yandex-map"></div>
     {% include "BrotherMapBundle:Map:_init_yandex.html.twig" with { map: map } %}
 {% endblock %}

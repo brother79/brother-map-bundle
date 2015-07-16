@@ -67,12 +67,12 @@ class YMap extends BaseMap
 
     public function getType()
     {
-        return $this->getParam('map_type', self::MAP_TYPE_HYBRID);
+        return $this->getParam('map_type', self::MAP_TYPE_HYBRID, 'map');
     }
 
     public function getZoom()
     {
-        return $this->getParam('map_zoom', 12);
+        return $this->getParam('map_zoom', 12, 'map');
     }
 
 }
