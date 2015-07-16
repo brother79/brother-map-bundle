@@ -1,64 +1,6 @@
-{#
-
-This file is part of the Sonata package.
-
-(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
-
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-
-#}
 {% extends sonata_block.templates.block_base %}
 
 {% block block %}
-    <div class="box box-primary">
-        {% if settings.title %}
-            <div class="box-header with-border">
-                <h4 class="box-title">
-                    <i class="fa fa-clock-o fa-fw"></i> {{ settings.title }}
-                </h4>
-            </div>
-        {% endif %}
-
-        <div class="box-body">
-            {% for name, category in logs %}
-                <div class="alert alert-default alert-info">
-                    <strong>{{ name }}:</strong>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table cellpadding="4">
-                            <thead>
-                            <th style="padding: 0 4px;">Дата</th>
-                            <th style="padding: 0 4px;">Время</th>
-                            {% for title in category.0.dataItemsTitle %}
-                                <th style="padding: 0 4px;">{{ title }}</th>
-                            {% endfor %}
-                            </thead>
-                            <tbody>
-                            {% for entity in category %}
-                                <tr>
-                                    <td style="padding: 0 4px;border: 1px solid #777;">
-                                        {{ entity.createdAt|date('m-d H:i:s') }}
-                                    </td>
-                                    <td style="padding: 0 4px;border: 1px solid #777;">
-                                        {{ entity.dataItemTime('time') }}
-                                    </td>
-                                    {% for value in entity.dataItemsValue %}
-                                        <td style="padding: 0 4px;border: 1px solid #777;">
-                                            {{ value }}
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <br/>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    <div id="{{ settings.html_id }}" class="yandex-map"></div>
+    {% include "BrotherMapBundle:Map:_init_yandex.html.twig" with { map: map } %}
 {% endblock %}

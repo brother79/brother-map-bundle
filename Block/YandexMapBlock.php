@@ -22,7 +22,6 @@ use Sonata\CoreBundle\Validator\ErrorElement;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\BaseBlockService;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  *
@@ -35,7 +34,7 @@ class YandexMapBlock extends BaseBlockService
     /**
      * @param string $name
      * @param EngineInterface $templating
-     * @param SecurityContextInterface $securityContext
+     * @param $config
      */
     public function __construct($name, EngineInterface $templating, $config)
     {
@@ -48,11 +47,14 @@ class YandexMapBlock extends BaseBlockService
      */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
+        // merge settings
+        $map = new YMap($blockContext->getSettings());
+
         return $this->renderPrivateResponse($blockContext->getTemplate(), array(
             'context' => $blockContext,
             'settings' => $blockContext->getSettings(),
             'block' => $blockContext->getBlock(),
-
+            'map' => $map
         ), $response);
     }
 
@@ -61,7 +63,12 @@ class YandexMapBlock extends BaseBlockService
      */
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
     {
-        // TODO: Implement validateBlock() method.
+        $errorElement
+            ->with('settings.html_id')->assertNotNull(array())->assertNotBlank()->end()
+            ->with('settings.latitude')->assertNotNull(array())->assertNotBlank()->end()
+            ->with('settings.longitude')->assertNotNull(array())->assertNotBlank()->end()
+            ->with('settings.map_type')->assertNotNull(array())->assertNotBlank()->end()
+            ->with('settings.map_zoom')->assertNotNull(array())->assertNotBlank()->end();
     }
 
     /**
@@ -71,17 +78,24 @@ class YandexMapBlock extends BaseBlockService
     {
         $formMapper->add('settings', 'sonata_type_immutable_array', array(
             'keys' => array(
-                array('title', 'text', array('required' => false, 'data' => 'Yandex map')),
-                array('latitude', 'number', array('required' => true, 'data' => $this->config['latitude'])),
-                array('longitude', 'number', array('required' => true, 'data' => $this->config['longitude'])),
-                array('map_type', 'choice', array('required' => true, 'data' => $this->config['type'], 'choices' => array(
+                array('title', 'text', array('required' => false)),
+                array('title_style', 'text', array('required' => false)),
+
+                array('html_id', 'text', array('required' => true, 'data' => $block->getSetting('html_id', 'ymap'))),
+                array('latitude', 'number', array('required' => true, 'data' => $block->getSetting('latitude', $this->config['latitude']), 'precision' => 6)),
+                array('longitude', 'number', array('required' => true, 'data' => $block->getSetting('longitude', $this->config['longitude']), 'precision' => 6)),
+                array('map_type', 'choice', array('required' => true, 'data' => $block->getSetting('map_type', $this->config['type']), 'choices' => array(
                     YMap::MAP_TYPE_HYBRID => 'Гибрит',
                     YMap::MAP_TYPE_MAP => 'Схема',
                     YMap::MAP_TYPE_PUBLIC => 'Народная',
                     YMap::MAP_TYPE_PUBLIC_HYBRID => 'Народная гибрит',
                     YMap::MAP_TYPE_SATELLITE => 'Спутник'
                 ))),
-                array('map_zoom', 'integer', array('required' => true, 'data' => $this->config['zoom'])),
+                array('map_zoom', 'choice', array('required' => true, 'data' => $block->getSetting('map_zoom', $this->config['zoom']), 'choices' => array(
+                    1 => 'Мелко', 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8,
+                    9 => 'Средне', 10 => 10, 11 => 11, 12 => 12, 13 => 13, 14 => 14, 15 => 15,
+                    16 => 'Крупно'
+                ))),
             )
         ));
     }
@@ -99,12 +113,18 @@ class YandexMapBlock extends BaseBlockService
      */
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
+//        AppDebug::_dx($resolver->);
         $resolver->setDefaults(array(
-            'title' => 'Yandex map',
+			'title' => null,
+			'title_style' => null,
             'template' => 'BrotherMapBundle:Block:yandex_map.html.twig',
             'context' => 'GLOBAL',
-//            'filter'          => true,
-//            'paginate'        => true,
+            'html_id' => 'ymap',
+            'latitude' => $this->config['latitude'],
+            'longitude' => $this->config['longitude'],
+            'map_type' => $this->config['type'],
+            'map_zoom' => $this->config['zoom'],
         ));
     }
+
 }

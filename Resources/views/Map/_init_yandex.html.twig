@@ -1,24 +1,15 @@
-<?php
-/* @var $id */
-/* @var $latitude */
-/* @var $longitude */
-/* @var $zoom */
-/* @var $type */
-/* @var $points */
-/* @var YMap $map */
-?>
 <script src="http://api-maps.yandex.ru/2.0/?load=package.full&mode=debug&lang=ru-RU" type="text/javascript"></script>
 <script type="text/javascript">
     ymaps.ready(function () {
-        var map = new ymaps.Map("{{ id }}", {
-            center: [{{ longitude  }}, {{ latitude }}],
-            zoom:{{ zoom  }}, type: "{{ type }}",
+        var map = new ymaps.Map("{{ map.htmlId }}", {
+            center: [{{ map.latitude }}, {{ map.longitude }}],
+            zoom:{{ map.zoom  }}, type: "{{ map.type }}",
             behaviors: ['default', 'scrollZoom']
         });
         {{ map.renderControls|raw }}
         {% if objects is defined %}
         {% for object in objects %}
-        map.geoObjects.add(new ymaps.GeoObject({{ object->renderYandex|raw }}));
+           map.geoObjects.add(new ymaps.GeoObject({{ object.renderYandex|raw }}));
         {% endfor %}
         {% endif %}
     });
