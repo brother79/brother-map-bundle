@@ -25,6 +25,7 @@ use Sonata\CoreBundle\Validator\ErrorElement;
 
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\BaseBlockService;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -170,6 +171,11 @@ class YandexMapBlock extends BaseBlockService
      */
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
+        $this->configureSettings($resolver);
+    }
+
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'map' => array(
                 'html_id' => 'ymap',
@@ -187,5 +193,6 @@ class YandexMapBlock extends BaseBlockService
             'context' => 'GLOBAL',
         ));
     }
+
 
 }
