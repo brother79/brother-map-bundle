@@ -6,19 +6,21 @@
  * Time: 14:40
  */
 
-namespace Brother\MapBundle\Model;
-
-
-use Brother\CommonBundle\AppDebug;
+namespace Brother\MapBundle\Model\Map;
 
 abstract class BaseMap
 {
 
     protected $params;
 
-    function __construct($params)
+    function __construct($params=array())
     {
         $this->params = $params;
+    }
+
+    public function getHtmlId()
+    {
+        return $this->getParam('html_id', 'ymap', 'map');
     }
 
     public function getParam($name, $default = null, $group=null)
@@ -27,11 +29,6 @@ abstract class BaseMap
             return $this->params[$group][$name];
         }
         return empty($this->params[$name]) ? $default : $this->params[$name];
-    }
-
-    public function getHtmlId()
-    {
-        return $this->getParam('html_id', 'ymap', 'map');
     }
 
     public function getLatitude()
@@ -58,13 +55,13 @@ abstract class BaseMap
         $this->params['controls'][] = $control;
     }
 
-    protected function getControls()
-    {
-        return isset($this->params['controls']) ? $this->params['controls'] : array();
-    }
-
     public function getObjects()
     {
         return isset($this->params['objects']) ? $this->params['objects'] : array();
+    }
+
+    protected function getControls()
+    {
+        return isset($this->params['controls']) ? $this->params['controls'] : array();
     }
 } 

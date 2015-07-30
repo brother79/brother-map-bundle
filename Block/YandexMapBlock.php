@@ -15,7 +15,7 @@ use Brother\MapBundle\Model\Options\PresetStorage;
 use Brother\MapBundle\Model\Shape\GeoObject;
 use Brother\MapBundle\Model\Shape\Point;
 use Brother\MapBundle\Model\Shape\Polygon;
-use Brother\MapBundle\Model\YMap;
+use Brother\MapBundle\Model\Map\YMap;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;

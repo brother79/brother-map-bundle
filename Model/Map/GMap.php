@@ -1,6 +1,6 @@
 <?php
 
-namespace Brother\MapBundle\Model;
+namespace Brother\MapBundle\Model\Map;
 
 /**
  * Created by JetBrains PhpStorm.
