@@ -22,7 +22,7 @@
     },
 	"autoload": {
 		"psr-4": {
-			"Brother\\MapBundle": ""
+			"Brother\\MapBundle\\": ""
 		}
 	},
     "extra": {
